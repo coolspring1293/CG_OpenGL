@@ -18,15 +18,39 @@ GLuint load_texture(const std::string& filename, GLenum target) {
   std::cout << "loading texture: " << filename << std::endl;
   unsigned char * data = SOIL_load_image(filename.c_str(), &width, &height, 0, SOIL_LOAD_RGBA);
   
+<<<<<<< HEAD
+=======
+  ILuint ihandle;
+  ilEnable(IL_ORIGIN_SET);
+  ilGenImages(1, &ihandle);
+  ilBindImage(ihandle);
+  ILboolean loaded = ilLoadImage(filename.c_str());
+  if (loaded == IL_FALSE)
+    std::cerr << "unable to load texture: " << filename << std::endl;
+  width = ilGetInteger(IL_IMAGE_WIDTH);
+  height = ilGetInteger(IL_IMAGE_HEIGHT);
+  int memory_needed = width * height * 4 * sizeof(unsigned char);
+  unsigned char * data = new unsigned char[memory_needed];
+  ilCopyPixels(0, 0, 0, width, height, 1, IL_RGBA, IL_UNSIGNED_BYTE, data);
+
+>>>>>>> leasunhy/master
   GLuint id;
   glGenTextures(1, &id);
   glBindTexture(target, id);
-  glTexImage2D(target, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+  glTexImage2D(target, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
   glGenerateMipmap(target);
+<<<<<<< HEAD
   SOIL_free_image_data(data);
 
+=======
+
+  //SOIL_free_image_data(data);
+
+  ilDeleteImages(1, &ihandle);
+  delete [] data;
+
+>>>>>>> leasunhy/master
   glBindTexture(target, 0);
   return id;
 }
-
 
